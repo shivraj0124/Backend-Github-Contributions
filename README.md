@@ -2,12 +2,12 @@
 
 # GitHub Contributions Fetcher
 
-This script allows you to fetch GitHub contribution data for a specific user using the GitHub GraphQL API.
+This Node.js server serves as the backend for a GitHub Contributions Viewer application. It interacts with the GitHub GraphQL API to fetch contribution data for a specified GitHub user.
 
 ## Prerequisites
 
-- Node.js installed on your machine
-- A GitHub Personal Access Token (PAT) with the necessary permissions
+- Node.js installed on your machine.
+- GitHub Personal Access Token (PAT) with the necessary permissions.
 
 ## Installation
 
@@ -17,10 +17,10 @@ This script allows you to fetch GitHub contribution data for a specific user usi
    git clone https://github.com/your-username/your-repo.git
    ```
 
-2. Navigate to the project directory:
+2. Navigate to the `backend` directory:
 
    ```bash
-   cd your-repo
+   cd your-repo/backend
    ```
 
 3. Install dependencies:
@@ -29,42 +29,84 @@ This script allows you to fetch GitHub contribution data for a specific user usi
    npm install
    ```
 
-4. Create a `.env` file in the root of the project and add your GitHub Personal Access Token:
+4. Create a `.env` file in the `backend` directory and add your GitHub Personal Access Token:
 
    ```env
-   GITHUB_ACCESS_TOKEN=your_github_access_token
+   TOKEN_KEY=your_github_access_token
    ```
 
    Replace `your_github_access_token` with your actual GitHub Personal Access Token.
 
 ## Usage
 
-Run the script with the desired GitHub username:
+Run the server:
 
 ```bash
-node getContributions.js your_github_username
+node server.js
 ```
 
-Replace `your_github_username` with the GitHub username for which you want to retrieve contributions.
+The server will run on `http://localhost:5001`.
 
-## Script Details
+## API Endpoint
 
-### `getContributions.js`
+### `POST /api/contributions`
 
-This script fetches GitHub contribution data for a specified user using the GitHub GraphQL API.
+This endpoint retrieves GitHub contribution data for a specified user.
 
-- **Input**: GitHub username (provided as a command-line argument).
-- **Output**: Prints contribution data to the console.
+#### Request
 
-## GitHub GraphQL API
+- **Method**: `POST`
+- **URL**: `http://localhost:5001/api/contributions`
+- **Body**:
 
-The script uses the GitHub GraphQL API to query user contributions. The GraphQL query is defined in the `query` variable within the script.
+  ```json
+  {
+    "username": "github_username"
+  }
+  ```
 
-## Error Handling
+  Replace `"github_username"` with the GitHub username you want to retrieve contributions for.
 
-The script handles errors such as invalid or missing GitHub username, network issues, or API response errors.
+#### Response
 
-## Note
+- **Success**: `200 OK`
 
-- Ensure that your GitHub Personal Access Token has the necessary permissions.
-- This script is a basic example and can be extended for more complex use cases or integrated into larger projects.
+  ```json
+  {
+    "totalContributions": 123,
+    "weeks": [
+      {
+        "contributionDays": [
+          {
+            "contributionCount": 5,
+            "date": "2023-01-01"
+          },
+          // ... additional contribution days
+        ]
+      },
+      // ... additional weeks
+    ]
+  }
+  ```
+
+- **Error**: `400 Bad Request` or `500 Internal Server Error`
+
+  ```json
+  {
+    "error": "User not found or API response structure is unexpected"
+  }
+  ```
+
+## Dependencies
+
+- **Express**: A web application framework for Node.js.
+- **Axios**: A promise-based HTTP client for making requests to the GitHub GraphQL API.
+- **Cors**: Middleware for enabling Cross-Origin Resource Sharing.
+
+## Configuration
+
+- **GitHub Access Token**: Ensure that your GitHub Personal Access Token is correctly set in the `.env` file.
+
+## Contributing
+
+Feel free to contribute to the project by creating issues or submitting pull requests.
