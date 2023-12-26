@@ -8,7 +8,7 @@ const PORT = 5001;
 app.use(express.json());
 app.use(cors());
 
-const GITHUB_ACCESS_TOKEN = process.env.TOKEN_KEY
+const GITHUB_ACCESS_TOKEN = process.env.TOKEN_KEY // personal github access token
 
 app.post('/api/contributions', async (req, res) => {
   try {
@@ -34,7 +34,7 @@ app.post('/api/contributions', async (req, res) => {
             }
           }
         `,
-        variables: { username: username } // Ensure the key matches the variable name in the query
+        variables: { username: username } 
       },
       {
         headers: {
